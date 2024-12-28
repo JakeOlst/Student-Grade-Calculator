@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Module {
-    protected String moduleName;
-    protected List<Assignment> assignments;
+    private String moduleName;
+    private List<Assignment> assignments;
 
     // constructors 
 
@@ -49,10 +49,16 @@ public class Module {
         return totalWeight;
     }
 
+    public void validateTotalWeight() {
+        int totalWeight = this.getTotalWeight();
+        if (totalWeight > 100) {
+            throw new IllegalStateException("The total weight of assignments exceeds 100%");
+        } else if (totalWeight < 100) {
+            throw new IllegalStateException("The total weight of assignments is less than 100%");
+        }
+    }
+
     public double calculateModuleGrade() {
-        if (this.getTotalWeight() != 100) {
-            throw new IllegalStateException("Invalid total assignment weight. Total weight should add to 100%. Current total weight: " + this.getTotalWeight());
-        } 
         double moduleScore = 0;
         for (Assignment assignment : this.assignments) {
             moduleScore += assignment.calculateAssignmentScore();

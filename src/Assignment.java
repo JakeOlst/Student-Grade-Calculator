@@ -1,19 +1,28 @@
 public class Assignment {
-    protected String assignmentName;
-    protected int assignmentWeight;
-    protected int assignmentMark;
-    protected boolean isCompleted;
+    private String assignmentName;
+    private int assignmentWeight;
+    private int assignmentMark;
+    private boolean isCompleted;
 
     // constructors for marked and unmarked assignments
 
     Assignment(String assignmentName, int assignmentWeight, int assignmentMark) {
+        if (!checkValidPercent(assignmentWeight)) {
+            throw new IllegalStateException("Invalid Assignment - Check the validity of the Assignment Weight: " + assignmentWeight);
+        } else if  (!checkValidPercent(assignmentMark)) {
+            throw new IllegalStateException("Invalid Assignment - Check the validity of the Assignment Mark: " + assignmentWeight);
+        }
         this.assignmentName = assignmentName;
         this.assignmentWeight = assignmentWeight;
         this.assignmentMark = assignmentMark;
         this.isCompleted = true;
+
     }
 
     Assignment(String assignmentName, int assignmentWeight) {
+        if (!checkValidPercent(assignmentWeight)) {
+            throw new IllegalStateException("Invalid Assignment - Check the validity of the Assignment Weight: " + assignmentWeight);
+        }
         this.assignmentName = assignmentName;
         this.assignmentWeight = assignmentWeight;
         this.assignmentMark = -1;
@@ -59,6 +68,10 @@ public class Assignment {
         } else {
             return ((double) assignmentMark / 100 * assignmentWeight);
         } 
+    }
+
+    public boolean checkValidPercent(int percentValue) {
+        return (percentValue >= 0 && percentValue <= 100) || percentValue == -1;
     }
 
     // implemented toString function for testing and validation.
