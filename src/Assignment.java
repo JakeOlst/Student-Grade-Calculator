@@ -17,4 +17,16 @@ public class Assignment {
         this.assignmentMark = 0;
         this.isCompleted = false;
     }
+
+    // implemented toString function for testing and validation.
+    @Override
+    public String toString() {
+        String outputString = ("Assignment '"+this.assignmentName+"' has the weight "+this.assignmentWeight+"%");
+        if (this.isCompleted) {
+            outputString += (" and received the mark "+this.assignmentMark);
+        } else {
+            outputString += (" and has not yet been marked.");
+        }
+        return outputString;
+    }
 }
