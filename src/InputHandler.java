@@ -2,7 +2,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InputHandler {
-    public Scanner userInput;
+    private Scanner userInput;
 
     public InputHandler() {
         this.userInput = new Scanner(System.in);
@@ -35,10 +35,8 @@ public class InputHandler {
     }
 
     public int getModuleCount() {
-        System.out.print("Please provide the number of modules: ");
-        int numberOfModules = userInput.nextInt();
-        userInput.nextLine();
-        return numberOfModules;
+        String prompt = "Please provide the number of modules: ";
+        return getValidatedInput(prompt, 1, 20);
     }
 
     /* Assignment Handling */
@@ -49,21 +47,40 @@ public class InputHandler {
     }
 
     public int getAssignmentWeight(String assignmentName) {
-        System.out.print("Please enter the Weight of Assignment " + assignmentName + ": ");
-        return userInput.nextInt();
+        String prompt = "Please enter the Weight of Assignment " + assignmentName + ": ";
+        return getValidatedInput(prompt, 1, 100);
     }
 
     public int getAssignmentMark(String assignmentName) {
-        System.out.print("Please enter the Mark of Assignment " + assignmentName + ": ");
-        return userInput.nextInt();
+        String prompt = "Please enter the Mark of Assignment " + assignmentName + ": ";
+        return getValidatedInput(prompt, 1, 100);
     }
 
     public int getAssignmentCount(String moduleName) {
-        System.out.print("Please enter the number of Assignments in Module " + moduleName + ": ");
-        return userInput.nextInt();
+        String prompt = "Please enter the number of Assignments in Module " + moduleName + ": ";
+        return getValidatedInput(prompt, 1, 20);
     }
 
     /* Helper Functions */
+
+    public int getValidatedInput(String prompt, int min, int max) {
+        int input;
+        while (true) {
+            System.out.print(prompt);
+            try {
+                input = userInput.nextInt();
+                userInput.nextLine();
+                if (input >= min && input <= max) {
+                    return input; 
+                } else {
+                    System.out.println("Invalid Input - Please enter a number between " + min + " and " + max + ". You entered: " + input);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid Input - Please enter a valid integer.");
+                userInput.nextLine();
+            }
+        }
+    }
 
     public void close() {
         if (this.userInput != null) {
