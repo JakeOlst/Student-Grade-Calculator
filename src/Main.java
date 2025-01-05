@@ -1,120 +1,49 @@
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-
-        Scanner userInput = new Scanner(System.in);
-        System.out.print("Please provide the name of your course: ");
-        String courseName = userInput.nextLine();
+        InputHandler userInput = new InputHandler();
+        String courseName = userInput.getCourseName();
         GradeCalculator gradeCalculator = new GradeCalculator(courseName);
 
-        System.out.print("Please provide the number of modules: ");
-        int numberOfModules = userInput.nextInt();
+        int numberOfModules = userInput.getModuleCount();
         while (numberOfModules < 1 || numberOfModules > 20) {
-            System.out.println("Invalid Input: '"+numberOfModules+"'");
-            System.out.print("Please provide the number of modules: ");
-            numberOfModules = userInput.nextInt();
+            System.out.println("Invalid Input - Number of Modules must be between 1 and 20. Your input: " + numberOfModules);
+            numberOfModules = userInput.getModuleCount();
         }
 
         for (int i = 0; i < numberOfModules; i++) {
-            System.out.print("Please enter the name of Module " + (i + 1) + ": ");
-            userInput.nextLine();
-            String moduleName = userInput.nextLine();
+            String moduleName = userInput.getModuleName(i+1);
             Module module = new Module(moduleName);
-        
-            System.out.print("Please enter the number of Assignments in Module " + moduleName + ": ");
-            int numberOfAssignments = userInput.nextInt();
+
+            int numberOfAssignments = userInput.getAssignmentCount(moduleName);
             while (numberOfAssignments < 1 || numberOfAssignments > 20) {
-                System.out.println("Invalid Input: '"+numberOfAssignments+"'");
-                System.out.print("Please enter the number of Assignments in Module " + moduleName + ": ");
-                numberOfAssignments = userInput.nextInt();
+                System.out.println("Invalid Input - Number of Assignments must be between 1 and 20. Your input: '" + numberOfAssignments + "' in Module '"+moduleName+"'.");
+                numberOfAssignments = userInput.getAssignmentCount(moduleName);
             }
-            userInput.nextLine();
-        
+
             for (int j = 0; j < numberOfAssignments; j++) {
-                System.out.print("Please enter the name of Assignment " + (j + 1) + " of Module " + (i + 1) + ": ");
-                String assignmentName = userInput.nextLine();
-        
-                System.out.print("Please enter the Weight of Assignment " + assignmentName + ": ");
-                int assignmentWeight = userInput.nextInt();
+                String assignmentName = userInput.getAssignmentName(j+1, i+1);
+                
+                int assignmentWeight = userInput.getAssignmentWeight(assignmentName);
                 while (assignmentWeight < 1 || assignmentWeight > 100) {
-                    System.out.println("Invalid Percentage: '"+assignmentWeight+"%'");
-                    System.out.print("Please enter the Weight of Assignment " + assignmentName + ": ");
-                    assignmentWeight = userInput.nextInt();
+                    System.out.println("Invalid Input - Assignment Weight Percentage must be between 1 and 100. Your input: '" + assignmentWeight + "%' for Assignment '"+assignmentName+"' in Module '"+moduleName+"'.");
+                    assignmentWeight = userInput.getAssignmentWeight(assignmentName);
                 }
-                userInput.nextLine();
-        
-                System.out.print("Please enter your mark of Assignment " + assignmentName + " (-1 if not graded): ");
-                int assignmentMark = userInput.nextInt();
+
+                int assignmentMark = userInput.getAssignmentMark(assignmentName);
                 while ((assignmentMark != -1) && (assignmentMark < 1 || assignmentMark > 100)) {
-                    System.out.println("Invalid Percentage: '"+assignmentMark+"%'");
-                    System.out.print("Please enter your mark of Assignment " + assignmentName + " (-1 if not graded): ");
-                    assignmentMark = userInput.nextInt();
+                    System.out.println("Invalid Input - Assignment Mark Percentage must be between 1 and 100. Your input: '" + assignmentMark + "%' for Assignment '"+assignmentName+"' in Module '"+moduleName+"'.");
+                    assignmentMark = userInput.getAssignmentMark(assignmentName);
                 }
-                userInput.nextLine();
-        
+
                 Assignment assignment = (assignmentMark == -1)
-                        ? new Assignment(assignmentName, assignmentWeight)
-                        : new Assignment(assignmentName, assignmentWeight, assignmentMark);
-        
+                    ? new Assignment(assignmentName, assignmentWeight)
+                    : new Assignment(assignmentName, assignmentWeight, assignmentMark);
+
                 module.addAssignment(assignment);
             }
-        
+
             gradeCalculator.addModule(module);
         }
-
-
-        /* 
-            Module programmingModule = new Module("Programming");
-            Assignment programmingAssignmentOne = new Assignment("Assignment One",25,100);
-            Assignment programmingAssignmentTwo = new Assignment("Assignment Two",25,55);
-            Assignment programmingAssignmentThree = new Assignment("Assignment Three",25,21);
-            Assignment programmingAssignmentFour = new Assignment("Assignment Four",25,88);
-
-            programmingModule.addAssignment(programmingAssignmentOne);
-            programmingModule.addAssignment(programmingAssignmentTwo);
-            programmingModule.addAssignment(programmingAssignmentThree);
-            programmingModule.addAssignment(programmingAssignmentFour);
-
-            Module algorithmsModule = new Module("Algorithms");
-            Assignment algorithmsAssignmentOne = new Assignment("Assignment One",50,89);
-            Assignment algorithmsAssignmentTwo = new Assignment("Assignment Two",50,99);
-
-            algorithmsModule.addAssignment(algorithmsAssignmentOne);
-            algorithmsModule.addAssignment(algorithmsAssignmentTwo);
-
-            Module mathematicsModule = new Module ("Computing Mathematics");
-            Assignment mathematicsAssignmentOne = new Assignment("Assignment One",25,55);
-            Assignment mathematicsAssignmentTwo = new Assignment("Assignment Two",25,43);
-            Assignment mathematicsAssignmentThree = new Assignment("Assignment Three",25,88);
-            Assignment mathematicsAssignmentFour = new Assignment("Assignment Four",25,12);
-
-            mathematicsModule.addAssignment(mathematicsAssignmentOne);
-            mathematicsModule.addAssignment(mathematicsAssignmentTwo);
-            mathematicsModule.addAssignment(mathematicsAssignmentThree);
-            mathematicsModule.addAssignment(mathematicsAssignmentFour);
-
-            Module humanComputerInteractionModule = new Module("Human Computer Interaction");
-            Assignment humanComputerInteractionAssignmentOne = new Assignment("Assignment Four",10,88);
-            Assignment humanComputerInteractionAssignmentTwo = new Assignment("Assignment Four",10,77);
-            Assignment humanComputerInteractionAssignmentThree = new Assignment("Assignment Four",30,66);
-            Assignment humanComputerInteractionAssignmentFour = new Assignment("Assignment Four",10,98);
-            Assignment humanComputerInteractionAssignmentFive = new Assignment("Assignment Four",10,34);
-            Assignment humanComputerInteractionAssignmentSix = new Assignment("Assignment Four",30,100);
-
-            humanComputerInteractionModule.addAssignment(humanComputerInteractionAssignmentOne);
-            humanComputerInteractionModule.addAssignment(humanComputerInteractionAssignmentTwo);
-            humanComputerInteractionModule.addAssignment(humanComputerInteractionAssignmentThree);
-            humanComputerInteractionModule.addAssignment(humanComputerInteractionAssignmentFour);
-            humanComputerInteractionModule.addAssignment(humanComputerInteractionAssignmentFive);
-            humanComputerInteractionModule.addAssignment(humanComputerInteractionAssignmentSix);
-
-            GradeCalculator gc = new GradeCalculator("Computer Science");
-            gc.addModule(programmingModule);
-            gc.addModule(algorithmsModule);
-            gc.addModule(mathematicsModule);
-            gc.addModule(humanComputerInteractionModule);
-        */
 
         userInput.close();
         System.out.println("Predicted Grade: " + gradeCalculator.calculateDegreeGrade());
