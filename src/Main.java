@@ -8,30 +8,50 @@ public class Main {
         String courseName = userInput.nextLine();
         GradeCalculator gradeCalculator = new GradeCalculator(courseName);
 
-        System.out.print("\n"+"Please provide the number of modules: ");
+        System.out.print("Please provide the number of modules: ");
         int numberOfModules = userInput.nextInt();
+        while (numberOfModules < 1 || numberOfModules > 20) {
+            System.out.println("Invalid Input: '"+numberOfModules+"'");
+            System.out.print("Please provide the number of modules: ");
+            numberOfModules = userInput.nextInt();
+        }
 
         for (int i = 0; i < numberOfModules; i++) {
-            System.out.print("\nPlease enter the name of Module " + (i + 1) + ": ");
-            userInput.nextLine(); // Consume leftover newline
+            System.out.print("Please enter the name of Module " + (i + 1) + ": ");
+            userInput.nextLine();
             String moduleName = userInput.nextLine();
             Module module = new Module(moduleName);
         
-            System.out.print("\nPlease enter the number of Assignments in Module " + moduleName + ": ");
-            int numAssignments = userInput.nextInt();
-            userInput.nextLine(); // Consume leftover newline
+            System.out.print("Please enter the number of Assignments in Module " + moduleName + ": ");
+            int numberOfAssignments = userInput.nextInt();
+            while (numberOfAssignments < 1 || numberOfAssignments > 20) {
+                System.out.println("Invalid Input: '"+numberOfAssignments+"'");
+                System.out.print("Please enter the number of Assignments in Module " + moduleName + ": ");
+                numberOfAssignments = userInput.nextInt();
+            }
+            userInput.nextLine();
         
-            for (int j = 0; j < numAssignments; j++) {
-                System.out.print("\nPlease enter the name of Assignment " + (j + 1) + " of Module " + (i + 1) + ": ");
+            for (int j = 0; j < numberOfAssignments; j++) {
+                System.out.print("Please enter the name of Assignment " + (j + 1) + " of Module " + (i + 1) + ": ");
                 String assignmentName = userInput.nextLine();
         
-                System.out.print("\nPlease enter the Weight of Assignment " + assignmentName + ": ");
+                System.out.print("Please enter the Weight of Assignment " + assignmentName + ": ");
                 int assignmentWeight = userInput.nextInt();
-                userInput.nextLine(); // Consume leftover newline
+                while (assignmentWeight < 1 || assignmentWeight > 100) {
+                    System.out.println("Invalid Percentage: '"+assignmentWeight+"%'");
+                    System.out.print("Please enter the Weight of Assignment " + assignmentName + ": ");
+                    assignmentWeight = userInput.nextInt();
+                }
+                userInput.nextLine();
         
-                System.out.print("\nPlease enter your mark of Assignment " + assignmentName + " (-1 if not graded): ");
+                System.out.print("Please enter your mark of Assignment " + assignmentName + " (-1 if not graded): ");
                 int assignmentMark = userInput.nextInt();
-                userInput.nextLine(); // Consume leftover newline
+                while ((assignmentMark != -1) && (assignmentMark < 1 || assignmentMark > 100)) {
+                    System.out.println("Invalid Percentage: '"+assignmentMark+"%'");
+                    System.out.print("Please enter your mark of Assignment " + assignmentName + " (-1 if not graded): ");
+                    assignmentMark = userInput.nextInt();
+                }
+                userInput.nextLine();
         
                 Assignment assignment = (assignmentMark == -1)
                         ? new Assignment(assignmentName, assignmentWeight)
@@ -96,6 +116,7 @@ public class Main {
             gc.addModule(humanComputerInteractionModule);
         */
 
+        userInput.close();
         System.out.println("Predicted Grade: " + gradeCalculator.calculateDegreeGrade());
 
     }
